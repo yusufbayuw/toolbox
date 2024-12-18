@@ -9,7 +9,7 @@
             size: A4 landscape;
             margin: 0;
         }
-
+ 
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
