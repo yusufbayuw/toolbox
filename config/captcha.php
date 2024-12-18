@@ -6,7 +6,7 @@ return [
         'width'     => 120,
         'height'    => 36,
         'quality'   => 100,
-        'math'      => true,  //Enable Math Captcha
+        'math'      => false,  //Enable Math Captcha
         'expire'    => 60,    //Captcha expiration
     ],
     // ...

@@ -52,7 +52,8 @@ class LinkResource extends Resource
                             ->required(),
                         Forms\Components\TextInput::make('link_desc')
                             ->label('Keterangan')
-                    ]),
+                    ])
+                    ->cloneable(),
                 Forms\Components\FileUpload::make('logo')
                     ->image()
             ]);
