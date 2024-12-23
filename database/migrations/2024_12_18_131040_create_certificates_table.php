@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('jabatan_penandatangan')->nullable();
             $table->string('file_tandatangan')->nullable();
             $table->string('background_image')->nullable();
-            $table->string('qrcode')->nullable();
             $table->timestamps();
         });
     }
