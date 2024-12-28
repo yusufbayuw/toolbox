@@ -74,11 +74,12 @@ class GoResource extends Resource
                     ->formatStateUsing(fn ($state) => parse_url($state, PHP_URL_HOST))
                     ->wrap(),
                 Tables\Columns\ImageColumn::make('logo')
-                    ->simpleLightbox()
+                    ->disk(config('base_urls.default_disk'))
+                    ->simpleLightbox(fn ($record) => env('R2_URL').$record->logo)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\ImageColumn::make('qr_code_image')
                     ->disk(config('base_urls.default_disk'))
-                    ->simpleLightbox(),
+                    ->simpleLightbox(fn ($record) => env('R2_URL').$record->qr_code_image),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
