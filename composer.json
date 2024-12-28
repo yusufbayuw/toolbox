@@ -16,6 +16,7 @@
         "league/flysystem-aws-s3-v3": "^3.29",
         "mews/captcha": "^3.4",
         "ntanduy/cloudflare-d1-database": "^0.2.0",
+        "predis/predis": "^2.3",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "solution-forest/filament-simplelightbox": "^0.0.10"
     },
