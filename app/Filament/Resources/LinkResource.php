@@ -55,6 +55,8 @@ class LinkResource extends Resource
                     ])
                     ->cloneable(),
                 Forms\Components\FileUpload::make('logo')
+                    ->disk(config('base_urls.default_disk'))
+                    ->directory(fn () => 'link/'.date('Y').'/'.date('m'))
                     ->image()
             ]);
     }

@@ -12,9 +12,10 @@ class CertificateController extends Controller
     {
         $participant = CertificateParticipant::where('uuid', $urlx)->first();
         $certificate = $participant->certificate;
+        
         $data = [
             'jenis_sertifikat' => $certificate->jenis,
-            'nomor_certificate' => $participant->nomor,
+            'nomor_sertifikat' => $participant->nomor,
             'nama_penerima' => $participant->nama_penerima,
             'asal_penerima' => $participant->asal_penerima,
             'deskripsi_sertifikat' => $certificate->deskripsi,
@@ -22,11 +23,14 @@ class CertificateController extends Controller
             'tanggal_penerbitan' => $certificate->tanggal_terbit,
             'nama_penandatangan' => $certificate->nama_penandatangan,
             'jabatan_penandatangan' => $certificate->jabatan_penandatangan,
-            'file_tandatangan' => env('BASE_CERT').'/'.$certificate->file_tandatangan,
-            'qr_code_path' => env('BASE_CERT_VAL').'/'.$participant->uuid_val,
-            'download_link' => env('BASE_CERT').'/'.$participant->uuid,
+            'file_tandatangan' => config('base_urls.base_cert').'/storage/'.$certificate->file_tandatangan,
+            'qr_code_path' => config('base_urls.base_cert_val').'/val/'.$participant->uuid_val,
+            'download_link' => config('base_urls.base_cert').'/'.$participant->uuid,
         ];
-        $pdf = Pdf::loadView('certificate.template', $data);
-        return $pdf->download('abc.pdf');
+        //dompdf
+        $pdf = Pdf::loadView('certificate.template', $data)
+        ->setPaper('a4', 'landscape');
+        return $pdf->stream($certificate->jenis.'-'.$participant->nomor.'-'.$participant->nama_penerima.'.pdf');
+
     }
 }

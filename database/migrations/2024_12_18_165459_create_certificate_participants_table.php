@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('certificate_participants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ceritificate_id')->nullable()->constrained('certificates')->cascadeOnDelete();
+            $table->foreignId('certificate_id')->nullable()->constrained('certificates')->cascadeOnDelete();
             $table->integer('nomor')->nullable();
             $table->string('nama_penerima')->nullable();
             $table->string('asal_penerima')->nullable();

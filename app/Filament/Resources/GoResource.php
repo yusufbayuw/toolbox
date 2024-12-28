@@ -42,6 +42,8 @@ class GoResource extends Resource
                     ->maxLength(255)
                     ->prefix(config('base_urls.base_go').'/'),
                 Forms\Components\FileUpload::make('logo')
+                    ->disk(config('base_urls.default_disk'))
+                    ->directory(fn () => 'go/'.date('Y').'/'.date('m'))
                     ->image(),
             ]);
     }
@@ -75,6 +77,7 @@ class GoResource extends Resource
                     ->simpleLightbox()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\ImageColumn::make('qr_code_image')
+                    ->disk(config('base_urls.default_disk'))
                     ->simpleLightbox(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

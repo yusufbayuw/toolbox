@@ -15,31 +15,7 @@ class GoObserver implements ShouldHandleEventsAfterCommit
      */
     public function created(Go $go): void
     {
-        // Go's QrCode Handling
-        if ($go->logo) {
-            $type = 'png';
-            $uuid = (Str::uuid()->toString()) . '.' . $type;
-            $qr = QrCode::size(500)
-                    ->format($type)
-                    ->mergeString(Storage::disk('public')->get($go->logo), .25)
-                    ->generate(config('base_urls.base_go') . '/' . $go->short_link);
-            Storage::disk('public')
-                ->put($uuid, $qr);
-            $image = Go::find($go->id);
-            $image->qr_code_image = $uuid;
-            $image->saveQuietly();
-        } else {
-            $type = 'png';
-            $uuid = (Str::uuid()->toString()) . '.' . $type;
-            $qr = QrCode::size(500)
-                    ->format($type)
-                    ->generate(config('base_urls.base_go') . '/' . $go->short_link);
-            Storage::disk('public')
-                ->put($uuid, $qr);
-            $image = Go::find($go->id);
-            $image->qr_code_image = $uuid;
-            $image->saveQuietly();
-        }
+        $this->generateAndStoreQrCode($go);
     }
 
     /**
@@ -47,45 +23,14 @@ class GoObserver implements ShouldHandleEventsAfterCommit
      */
     public function updated(Go $go): void
     {
-        // logo handling
+        // Handle logo update
         if ($go->isDirty('logo')) {
-            if ($go->getOriginal('logo')) {
-                if (Storage::disk('public')->exists($go->getOriginal('logo'))) {
-                    Storage::disk('public')->delete($go->getOriginal('logo'));
-                }
-            }
+            $this->deleteFile($go->getOriginal('logo'));
         }
 
-        // Go's QrCode Handling
-        if ($go->qr_code_image) {
-            if (Storage::disk('public')->exists($go->qr_code_image)) {
-                Storage::disk('public')->delete($go->qr_code_image);
-            }
-        }
-        if ($go->logo) {
-            $type = 'png';
-            $uuid = (Str::uuid()->toString()) . '.' . $type;
-            $qr = QrCode::size(500)
-                    ->format($type)
-                    ->mergeString(Storage::disk('public')->get($go->logo), .25)
-                    ->generate(config('base_urls.base_go') . '/' . $go->short_link);
-            Storage::disk('public')
-                ->put($uuid, $qr);
-            $image = Go::find($go->id);
-            $image->qr_code_image = $uuid;
-            $image->saveQuietly();
-        } else {
-            $type = 'png';
-            $uuid = (Str::uuid()->toString()) . '.' . $type;
-            $qr = QrCode::size(500)
-                    ->format($type)
-                    ->generate(config('base_urls.base_go') . '/' . $go->short_link);
-            Storage::disk('public')
-                ->put($uuid, $qr);
-            $image = Go::find($go->id);
-            $image->qr_code_image = $uuid;
-            $image->saveQuietly();
-        }
+        // Handle QR code update
+        $this->deleteFile($go->qr_code_image);
+        $this->generateAndStoreQrCode($go);
     }
 
     /**
@@ -93,34 +38,39 @@ class GoObserver implements ShouldHandleEventsAfterCommit
      */
     public function deleted(Go $go): void
     {
-        // logo handling
-        if ($go->logo) {
-            if (Storage::disk('public')->exists($go->logo)) {
-                Storage::disk('public')->delete($go->logo);
-            }
-        }
-
-        // Go's QrCode Handling
-        if ($go->qr_code_image) {
-            if (Storage::disk('public')->exists($go->qr_code_image)) {
-                Storage::disk('public')->delete($go->qr_code_image);
-            }
-        }
+        $this->deleteFile($go->logo);
+        $this->deleteFile($go->qr_code_image);
     }
 
     /**
-     * Handle the Go "restored" event.
+     * Generate and store QR code for the Go model.
      */
-    public function restored(Go $go): void
+    private function generateAndStoreQrCode(Go $go): void
     {
-        //
+        $type = 'png';
+        $uuid = Str::uuid()->toString() . '.' . $type;
+        $filepath = 'go/'.date('Y') . '/' . date('m') . '/qr/' . $uuid;
+
+        $qrCode = QrCode::size(500)
+            ->format($type)
+            ->mergeString(
+                $go->logo ? Storage::disk(config('base_urls.default_disk'))->get($go->logo) : null,
+                0.25
+            )
+            ->generate(config('base_urls.base_go') . '/' . $go->short_link);
+
+        Storage::disk(config('base_urls.default_disk'))->put($filepath, $qrCode);
+
+        $go->updateQuietly(['qr_code_image' => $filepath]);
     }
 
     /**
-     * Handle the Go "force deleted" event.
+     * Delete a file if it exists.
      */
-    public function forceDeleted(Go $go): void
+    private function deleteFile(?string $filePath): void
     {
-        //
+        if ($filePath && Storage::disk(config('base_urls.default_disk'))->exists($filePath)) {
+            Storage::disk(config('base_urls.default_disk'))->delete($filePath);
+        }
     }
 }
