@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
         if (env('APP_ENV') === "production") {
-            URL::forceHttps();
+            URL::forceScheme('https');
         }
     }
 }
