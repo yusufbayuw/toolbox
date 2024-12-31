@@ -10,5 +10,5 @@ return [
 
     'base_cert_val' => env('BASE_CERT_VAL', 'http://doc.tbu.ac.id/val'),
 
-    'default_disk' => 'r2',
+    'default_disk' => 'public',
 ];
