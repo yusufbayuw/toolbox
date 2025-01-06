@@ -12,6 +12,7 @@
         "coderflex/filament-turnstile": "^2.2",
         "dominion-solutions/filament-captcha": "^0.1.0",
         "filament/filament": "^3.2",
+        "lara-zeus/popover": "^1.1",
         "lara-zeus/qr": "^1.1",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
