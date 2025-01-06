@@ -51,13 +51,19 @@ class GoObserver implements ShouldHandleEventsAfterCommit
         $uuid = Str::uuid()->toString() . '.' . $type;
         $filepath = 'go/'.date('Y') . '/' . date('m') . '/qr/' . $uuid;
 
-        $qrCode = QrCode::size(500)
+        if ($go->logo) {
+            # when logo uploaded
+            $qrCode = QrCode::size(500)
+                ->format($type)
+                ->mergeString(
+                    Storage::disk(config('base_urls.default_disk'))->get($go->logo),0.25
+                )
+                ->generate(config('base_urls.base_go') . '/' . $go->short_link);
+        } else {
+            $qrCode = QrCode::size(500)
             ->format($type)
-            ->mergeString(
-                $go->logo ? Storage::disk(config('base_urls.default_disk'))->get($go->logo) : null,
-                0.25
-            )
             ->generate(config('base_urls.base_go') . '/' . $go->short_link);
+        }
 
         Storage::disk(config('base_urls.default_disk'))->put($filepath, $qrCode);
 
