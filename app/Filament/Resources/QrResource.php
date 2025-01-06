@@ -23,14 +23,10 @@ class QrResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('content')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('qr_code')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('options')
-                    ->required()
-                    ->columnSpanFull(),
+                \LaraZeus\Qr\Components\Qr::make('qr_code')
+                    ->asSlideOver()
+                    ->optionsColumn('options')
+                    ->actionIcon('heroicon-s-building-library'),
             ]);
     }
 
