@@ -11,4 +11,6 @@ return [
     'base_cert_val' => env('BASE_CERT_VAL', 'http://doc.tbu.ac.id/val'),
 
     'default_disk' => 'public',
+
+    'login_turnstile' => env('LOGIN_TURNSTILE', true),
 ];

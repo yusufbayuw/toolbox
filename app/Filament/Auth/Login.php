@@ -2,11 +2,12 @@
 
 namespace App\Filament\Auth;
 
-use DominionSolutions\FilamentCaptcha\Forms\Components\Captcha;
 use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Component;
+use Filament\Forms\Components\TextInput;
 use Filament\Pages\Auth\Login as BaseAuth;
+use Coderflex\FilamentTurnstile\Forms\Components\Turnstile;
+use DominionSolutions\FilamentCaptcha\Forms\Components\Captcha;
 
 class Login extends BaseAuth 
 {
@@ -17,7 +18,11 @@ class Login extends BaseAuth
         $this->getEmailFormComponent(),
         //$this->getLoginFormComponent(),
         $this->getPasswordFormComponent(),
-        Captcha::make('captcha')
+        config('base_urls.login_turnstile') ? 
+        Turnstile::make('captcha')
+            ->label('Captcha')
+            ->theme('auto')
+        : Captcha::make('captcha')
             ->rules(['captcha'])
             ->required()
             ->validationMessages([
@@ -46,5 +51,12 @@ class Login extends BaseAuth
             $login_type => $data['email'],
             'password'  => $data['password'],
         ];
+    }
+
+    protected function throwFailureValidationException(): never
+    {
+        $this->dispatch('reset-captcha');
+ 
+        parent::throwFailureValidationException();
     }
 }
