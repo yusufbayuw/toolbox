@@ -12,7 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use LaraZeus\Popover\Tables\PopoverColumn;
 
 class QrResource extends Resource
 {
@@ -38,14 +37,6 @@ class QrResource extends Resource
                 Tables\Columns\TextColumn::make('qr_code')
                     ->label('Konten')
                     ->searchable(),
-                PopoverColumn::make('image')
-                    ->label('QRCode')
-                    ->trigger('click')
-                    ->placement('right')
-                    ->offset([0,10])
-                    ->popOverMaxWidth('none')
-                    ->icon('heroicon-o-chevron-right')
-                    ->content(\LaraZeus\Qr\Facades\Qr::render(data:'dataOrUrl')),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
