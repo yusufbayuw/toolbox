@@ -32,32 +32,45 @@ class CertificateResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Hidden::make('user_id')
+                    ->default(auth()->user()->id),
                 Forms\Components\TextInput::make('jenis')
+                    ->label('Judul Sertifikat')
+                    ->hint('misal: Sertifikat Pelatihan')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('prefix_nomor')
+                    ->label('Prefix Penomoran')
+                    ->hint('misal: ORG/XII/12/')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\Textarea::make('deskripsi')
+                    ->hint('misal: telah mengikuti pelatihan pada...')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('lokasi')
+                    ->hint('misal: Bandung')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('tanggal_terbit')
+                    ->hint('misal: 10 Januari 2025')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('nama_penandatangan')
+                    ->hint('misal: Lorem Ipsum, PhD')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('jabatan_penandatangan')
+                    ->hint('misal: Direktur Lembaga')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\FileUpload::make('file_tandatangan')
+                    ->hint('saran: background png transparan')
                     ->disk(config('base_urls.default_disk'))
                     ->directory(fn () => 'cert/'.date('Y').'/'.date('m'))
                     ->image()
                     ->required(),
                 Forms\Components\FileUpload::make('background_image')
+                    ->hint('gambar ukuran A4 landscape')
                     ->disk(config('base_urls.default_disk'))
                     ->directory(fn () => 'cert/'.date('Y').'/'.date('m'))
                     ->image()

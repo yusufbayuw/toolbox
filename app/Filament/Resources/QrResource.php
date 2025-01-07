@@ -17,7 +17,7 @@ class QrResource extends Resource
 {
     protected static ?string $model = Qr::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-qr-code';
 
     protected static ?string $modelLabel = 'QRCode Maker';
 
@@ -36,10 +36,11 @@ class QrResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Hidden::make('user_id')
+                    ->default(auth()->user()->id),
                 \LaraZeus\Qr\Components\Qr::make('qr_code')
                     ->asSlideOver()
-                    ->optionsColumn('options')
-                    ->actionIcon('heroicon-s-building-library'),
+                    ->optionsColumn('options'),
             ]);
     }
 
