@@ -23,6 +23,15 @@ class GoResource extends Resource
 
     protected static ?string $slug = 'go';
 
+    public static function getEloquentQuery(): Builder
+    {
+        if (auth()->user()->hasRole(['super_admin'])) {
+            return parent::getEloquentQuery();
+        } else {
+            return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
+        }
+    }
+
     public static function form(Form $form): Form
     {
         return $form
