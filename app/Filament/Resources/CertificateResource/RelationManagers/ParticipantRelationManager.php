@@ -43,7 +43,7 @@ class ParticipantRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('uuid')
                 ->label('Link')
                 ->formatStateUsing(fn () => "LINK")
-                ->url(fn ($state) => env('BASE_CERT')."/{$state}",true),
+                ->url(fn ($state) => config("base_urls.base_cert")."/{$state}",true),
             ])
             ->filters([
                 //
