@@ -49,6 +49,10 @@ class LinkResource extends Resource
                     ->label('URL')
                     ->prefix(fn() => config('base_urls.base_link') . '/')
                     ->maxLength(255),
+                Forms\Components\FileUpload::make('logo')
+                    ->disk(config('base_urls.default_disk'))
+                    ->directory(fn () => 'link/'.date('Y').'/'.date('m'))
+                    ->image(),
                 Forms\Components\Repeater::make('links')
                     ->required()
                     ->schema([
@@ -63,10 +67,6 @@ class LinkResource extends Resource
                             ->label('Keterangan')
                     ])
                     ->cloneable(),
-                Forms\Components\FileUpload::make('logo')
-                    ->disk(config('base_urls.default_disk'))
-                    ->directory(fn () => 'link/'.date('Y').'/'.date('m'))
-                    ->image()
             ]);
     }
 
@@ -85,6 +85,10 @@ class LinkResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('url_slug')
+                    ->label('URL')
+                    ->formatStateUsing(fn ($state) => config('base_urls.base_link')."/{$state}")
+                    ->copyable()
+                    ->copyableState(fn ($state) => config('base_urls.base_link')."/{$state}")
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('logo')
                     ->simpleLightbox(),
