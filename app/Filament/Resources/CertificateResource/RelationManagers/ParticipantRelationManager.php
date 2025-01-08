@@ -91,7 +91,7 @@ class ParticipantRelationManager extends RelationManager
                     Tables\Actions\Action::make('upload')
                         ->label('Upload CSV')
                         ->icon('heroicon-m-document-arrow-down')
-                        ->url(url('files/cert_participant_upload_template')) // Generate the URL to the file
+                        ->url(url('files/cert_participant_upload_template.csv')) // Generate the URL to the file
                         ->openUrlInNewTab(), // Optionally, open in a new tab
                     Tables\Actions\Action::make('background')
                         ->label('Background Image')
