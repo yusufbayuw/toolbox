@@ -41,9 +41,9 @@ class ParticipantRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('nama_penerima'),
                 Tables\Columns\TextColumn::make('asal_penerima'),
                 Tables\Columns\TextColumn::make('uuid')
-                ->label('Link')
-                ->formatStateUsing(fn () => "LINK")
-                ->url(fn ($state) => config("base_urls.base_cert")."/{$state}",true),
+                    ->label('Link')
+                    ->formatStateUsing(fn() => "LINK")
+                    ->url(fn($state) => config("base_urls.base_cert") . "/{$state}", true),
             ])
             ->filters([
                 //
@@ -81,12 +81,28 @@ class ParticipantRelationManager extends RelationManager
                             \App\Models\CertificateParticipant::create([
                                 'certificate_id' => $certificateId,
                                 'nomor' => $participant['nomor'],
-                                'nama_penerima' => $participant['nama_penerima'], 
+                                'nama_penerima' => $participant['nama_penerima'],
                                 'asal_penerima' => $participant['asal_penerima'],
                             ]);
                         }
                     })
                     ->color('success'),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('upload')
+                        ->label('Upload CSV')
+                        ->icon('heroicon-m-document-arrow-down')
+                        ->url(url('files/cert_participant_upload_template')) // Generate the URL to the file
+                        ->openUrlInNewTab(), // Optionally, open in a new tab
+                    Tables\Actions\Action::make('background')
+                        ->label('Background Image')
+                        ->icon('heroicon-m-arrow-down-tray')
+                        ->url(url('images/certificate_template.png')) // Generate the URL to the file
+                        ->openUrlInNewTab(),
+                ])
+                    ->label('Template')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->color('danger')
+                    ->button(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
