@@ -40,8 +40,8 @@ class CertificateResource extends Resource
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('prefix_nomor')
-                    ->label('Prefix Penomoran')
-                    ->hint('misal: ORG/XII/12/')
+                    ->label('Suffix Penomoran')
+                    ->hint('misal: /ORG/XII/01/2025')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\Textarea::make('deskripsi')
@@ -85,6 +85,7 @@ class CertificateResource extends Resource
                 Tables\Columns\TextColumn::make('jenis')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('prefix_nomor')
+                    ->label('Suffix')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('lokasi')
                     ->searchable(),
