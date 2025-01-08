@@ -38,9 +38,7 @@ class QrResource extends Resource
             ->schema([
                 Forms\Components\Hidden::make('user_id')
                     ->default(auth()->user()->id),
-                \LaraZeus\Qr\Components\Qr::make('qr_code')
-                    ->asSlideOver()
-                    ->optionsColumn('options'),
+                ...\LaraZeus\Qr\Facades\Qr::getFormSchema('qr_code', 'options'),
             ]);
     }
 
